@@ -41,7 +41,7 @@ db.once('open', function() {
 *
 */
 var routes = require('./routes/index')
-// var hits = require('./routes/hits')
+var images = require('./routes/images')
 
 var app = express()
 
@@ -52,7 +52,7 @@ var app = express()
 *
 */
 app.use('/', routes)
-// app.use('/hits', hits)
+app.use('/images', images)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
