@@ -1,14 +1,57 @@
-const Hit = require('../models/hitModel.js')
+const Image = require('../models/Image.js')
 const mongoose = require('mongoose')
 const assert = require('assert')
+const path = require('path')
+const fs = require('fs')
+const mkdirp = require('mkdirp')
+
 mongoose.Promise = global.Promise
 
 /**
 * hitController.js
 *
-* @description :: Server-side logic for managing hits.
+* @description :: Server-side logic for managing images.
 */
 module.exports = {
+
+  /**
+  * imageController.create()
+  */
+  create: function (req, res) {
+    console.log('ImageController.create')
+    console.log(req.files.file.name);
+    console.log(req.files.file.path);
+    const data = {
+      name: req.files.file.name,
+      date: new Date()
+    }
+    var image = new Image(data)
+    var promise = image.save()
+
+    promise.then(image => {
+      console.log('Image', image);
+      const extension =  req.files.file.name.split('.').pop();
+      const lvlOne = image._id.toString().substr(0,2);
+      const lvlTwo = image._id.toString().substr(2,2);
+      const imagesDir = path.join(`${__dirname}/../`, 'images')
+      const imagePath = path.join(imagesDir, `/${lvlOne}/${lvlTwo}/${image._id}.${extension}`)
+      const filePath = path.join(imagesDir, `/${lvlOne}/${lvlTwo}`)
+      console.log('image path', imagePath);
+      console.log('file path', req.files.file.path);
+
+      if (!fs.existsSync(filePath)) {
+        mkdirp(filePath, (err) => {
+          if (!err) fs.rename(req.files.file.path, imagePath)
+        });
+      }
+
+      // res.redirect(`/images/${image._id}`)
+    })
+    .catch(error => {
+      console.log('error ', error)
+    })
+
+  },
 
   /**
   * hitController.list()

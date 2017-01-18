@@ -5,6 +5,7 @@ var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
+var formidable = require('express-formidable')
 
 /*
 * Mongodb
@@ -44,8 +45,11 @@ var routes = require('./routes/index')
 var images = require('./routes/images')
 
 var app = express()
+// formidable setup
+app.use(formidable({ keepExtensions: true }));
 
-
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 /*
 *    Routes at app
@@ -58,25 +62,23 @@ app.use('/images', images)
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'jade')
 
+
 // Moment setup
 app.locals.moment = require('moment')
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(logger('dev'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
+// error handlers
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found')
   err.status = 404
   next(err)
 })
-
-// error handlers
 
 // development error handler
 // will print stacktrace
