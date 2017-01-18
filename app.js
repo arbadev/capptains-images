@@ -5,6 +5,7 @@ var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
+var stormpath = require('express-stormpath')
 
 /*
 * Mongodb
@@ -46,6 +47,33 @@ var images = require('./routes/images')
 var app = express()
 
 
+/*
+*    stormpath auth init
+*
+*/
+app.use(stormpath.init(app, {
+  website: true,
+  web: {
+    login: {
+      form: {
+        fields: {
+          login: {
+            label: 'el corre saldina',
+            placeholder: 'saldina@trustyapp.com'
+          },
+          password: {
+            label: 'la contra saldina!'
+          }
+        }
+      }
+    },
+    logout: {
+      enabled: true,
+      uri: '/log-me-out',
+      nextUri: '/goodbye'
+    }
+  }
+}));
 
 /*
 *    Routes at app
