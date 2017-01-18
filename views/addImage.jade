@@ -1,0 +1,20 @@
+extends ../node_modules/jade-bootstrap/_bootstrap.jade
+link(rel="stylesheet",href="/public/stylesheets/style.css")
+
+block body 
+  div(class="col-md-12")
+    p
+    .col-md-8.col-md-offset-2
+      +panel-default("Add new image")
+        form(action="/app/imagenes" method="POST" enctype="multipart/form-data")
+          div(class="form-group")
+            label(for="title") Title
+            input(type="text", name="title", placeholder="Image title...",
+            id="title", class="form-control")
+          div
+            label(for="file") Image
+            input(type="file", name="file", id="file", class="form-control")
+          p
+          div(class="row top-space")
+            div(class="col-xs-10 col-sm-5")
+            input(type="submit", value="Save", class="btn btn-info")

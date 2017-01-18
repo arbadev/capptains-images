@@ -11,11 +11,16 @@ var jsonParser = bodyParser.json()
 * @author Andres Barradas
 */
 
-router.get('/images/new', function (req, res) {
-  // body...
+router.get('/new', function (req, res) {
+  res.render(
+    'addImage',
+    {
+      title: 'Add Images',
+    }
+  )
 })
 
-router.put('/images/:id/edit', function (req, res) {
+router.put('/:id/edit', function (req, res) {
   // body...
 })
 
@@ -24,7 +29,7 @@ router.put('/images/:id/edit', function (req, res) {
 * @author Andres Barradas
 */
 
-router.route('/images/:id')
+router.route('/:id')
   .get(function (req, res) {
     // body...
   })
@@ -41,7 +46,7 @@ router.route('/images/:id')
 * @author Andres Barradas
 */
 
-router.route('/images')
+router.route('/')
   .get(function (req, res) {
     // body...
   })
