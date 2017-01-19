@@ -11,7 +11,9 @@ var formidable = require('express-formidable')
 * Mongodb
 *
 */
-mongoose.connect('mongodb://localhost/nodeTask')
+
+
+mongoose.connect('mongodb://localhost/captainsTask')
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
 db.once('open', function() {
@@ -21,7 +23,9 @@ db.once('open', function() {
 
 
 // Reset the database
-// db.collections['lasthits', 'hits'].drop(() => { console.log('db dropped') })
+// db.collections['Image'].drop( function(err) {
+//     console.log('collection dropped');
+// });
 
 
 // /**
@@ -45,9 +49,9 @@ var routes = require('./routes/index')
 var images = require('./routes/images')
 
 var app = express()
+
 // formidable setup
 app.use(formidable({ keepExtensions: true }));
-
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 

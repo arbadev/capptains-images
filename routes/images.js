@@ -2,7 +2,6 @@ var express = require('express')
 var router = express.Router()
 var imageController = require('../controllers/ImageController.js')
 var bodyParser = require('body-parser')
-const formidable = require('express-formidable')
 
 // create application/json parser
 var jsonParser = bodyParser.json()
@@ -32,16 +31,15 @@ router.put('/:id/edit', function (req, res) {
 
 router.route('/:id')
 .get(function (req, res) {
-  console.log('params', req.params);
-  // ImageController.show(req.params._id)
+  console.log('params', req.params)
+  imageController.show(req, res)
 })
 .put(function (req, res) {
   // body...
 })
 .delete(function (req, res) {
-  // body...
+  imageController.remove(req, res)
 });
-
 
 /**
 * @description Access endpoint to image colletion
@@ -50,15 +48,16 @@ router.route('/:id')
 /*
 * POST
 */
-router.post('/', jsonParser, function (req, res) {
+router.post('/', function (req, res) {
   imageController.create(req, res)
 });
 /*
 * GET
 */
-router.get('/', jsonParser, function (req, res) {
+router.get('/', function (req, res) {
   console.log('dentro de GET /images');
   console.log(req.body);
 })
+
 
 module.exports = router

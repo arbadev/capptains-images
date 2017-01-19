@@ -4,7 +4,8 @@ var Schema   = mongoose.Schema
 var imageSchema = new Schema({
 	name : String,
 	created_at : Date,
-	path : String,
+	fullPath : String,
+	shortPath : String,
 	// user: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 

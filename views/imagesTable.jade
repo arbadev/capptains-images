@@ -16,10 +16,10 @@ block body
     table(id='imagesTable' class='#{type}').table
       tbody
         each image, i in images
-          - var url = image.url
+          - var url = "http://localhost:3000/images/"+image._id
           tr
             td(class='clickable-td' data-href=url)
-              p #{image.title}
+              p #{image.name}
             td(class='clickable-td' data-href=url)
               - var date = image.created_at
               p #{ moment(date).calendar() }
@@ -39,7 +39,7 @@ block body
       +a-btn-primary("http://localhost:3000/images/new")
         +icon('plus')
 
-  .col-md-10.col-md-offset-1
+  .col-md-8.col-md-offset-2
     +table(hits)              
 
   script.
@@ -61,7 +61,7 @@ block body
               } // 400 Bad Request
           } // statusCode
       }); // ajax call
-      $('#hitsTable').on('click', ":button", function(){
+      $('#imagesTable').on('click', ":button", function(){
         $(this).closest ('tr').remove ();
       });
     };
