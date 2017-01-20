@@ -11,8 +11,6 @@ var formidable = require('express-formidable')
 * Mongodb
 *
 */
-
-
 mongoose.connect('mongodb://localhost/captainsTask')
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
@@ -21,25 +19,10 @@ db.once('open', function() {
   console.log('Listening on port =====> 3000')
 })
 
-
 // Reset the database
 // db.collections['Image'].drop( function(err) {
 //     console.log('collection dropped');
 // });
-
-
-// /**
-// * @method verifyDb
-// * @description Count the number of collections in 'Hit', and populate if
-// * its empty
-// * @author Andres Barradas
-// */
-// function verifyDb() {
-//   Hit.count({})
-//     .then(count => count == 0 ? getInitHits() : Promise.resolve())
-//     .catch(err => console.log)
-// }
-
 
 /*
 *    Routes import
@@ -51,7 +34,7 @@ var images = require('./routes/images')
 var app = express()
 
 // formidable setup
-app.use(formidable({ keepExtensions: true }));
+app.use(formidable());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
@@ -76,13 +59,13 @@ app.use(logger('dev'))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-// error handlers
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found')
-  err.status = 404
-  next(err)
-})
+// // error handlers (correction)
+// // catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//   var err = new Error('Not Found')
+//   err.status = 404
+//   next(err)
+// })
 
 // development error handler
 // will print stacktrace

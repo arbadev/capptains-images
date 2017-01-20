@@ -42,11 +42,11 @@ module.exports = {
 
       if (!fs.existsSync(filePath)) {
         mkdirp(filePath, (err) => {
-          if (!err) {
-            fs.rename(req.files.file.path, imagePath)
-          }
+          if (err) console.error(err)
+          else console.log(`created dir ${filePath}`)
         })
       }
+      fs.rename(req.files.file.path, imagePath)
       var criteria = { _id: image._id }
       var updateData = { fullPath: imagePath, shortPath: shortPath }
       var opts = { new: true }
@@ -92,17 +92,13 @@ module.exports = {
     const promise = Image.findOne(criteria)
 
     promise.then(image => {
-      res.render(
-        'show',
-        {
-          image: image
-        }
-      )
+      console.log('SHOW IMAGE', image);
+      return res.sendFile(image.fullPath)
 
       // return res.status(201).json(hit)
     })
     .catch(error => {
-      return res.status(400).json(hit)
+      return res.status(400).json(error)
       console.log.error('error ', error)
     })
   },

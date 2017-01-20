@@ -11,8 +11,8 @@ var jsonParser = bodyParser.json()
 * @author Andres Barradas
 */
 
-router.get('/new', function (req, res) {
-  res.render(
+router.get('/new',jsonParser, function (req, res) {
+  return res.render(
     'addImage',
     {
       title: 'Add Images',
@@ -29,7 +29,7 @@ router.put('/:id/edit', function (req, res) {
 * @author Andres Barradas
 */
 
-router.route('/:id')
+router.route('/:id',jsonParser)
 .get(function (req, res) {
   console.log('params', req.params)
   imageController.show(req, res)
@@ -48,16 +48,10 @@ router.route('/:id')
 /*
 * POST
 */
-router.post('/', function (req, res) {
+router.post('/', jsonParser, function (req, res) {
   imageController.create(req, res)
 });
-/*
-* GET
-*/
-router.get('/', function (req, res) {
-  console.log('dentro de GET /images');
-  console.log(req.body);
-})
+
 
 
 module.exports = router

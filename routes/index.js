@@ -6,11 +6,15 @@ const Image = require('../models/Image.js')
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
-  const query = Image.find({})
-  const promise = query.exec()
+  const selectAttributes = {
+    name: 1,
+    created_at: 1,
+    fullPath: 1
+  }
 
+  const promise = Image.find({}).select(selectAttributes)
   promise.then(images => {
-    res.render(
+    return res.render(
       'imagesTable',
       {
         title: 'Image server',
