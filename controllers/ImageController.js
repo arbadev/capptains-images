@@ -40,13 +40,15 @@ module.exports = {
       console.log('image path', imagePath);
       console.log('file path', req.files.file.path);
 
-      if (!fs.existsSync(filePath)) {
+      if (!fs.existsSync(filePath) || !fs.existsSync(imagePath)) {
         mkdirp(filePath, (err) => {
           if (err) console.error(err)
-          else console.log(`created dir ${filePath}`)
+          else {
+            console.log(`created dir ${filePath}`)
+            fs.rename(req.files.file.path, imagePath)
+          }
         })
       }
-      fs.rename(req.files.file.path, imagePath)
       var criteria = { _id: image._id }
       var updateData = { fullPath: imagePath, shortPath: shortPath }
       var opts = { new: true }
@@ -111,6 +113,7 @@ module.exports = {
     const id = req.params.id
     const promise = Image.findByIdAndRemove(id)
     promise.then(removedImage => {
+      fs.unlinkSync(removedImage.fullPath)
       console.log('removed image', removedImage)
       return res.status(200).json(removedImage)
     })
