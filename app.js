@@ -7,6 +7,14 @@ var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var formidable = require('express-formidable')
 
+// User model to bootstrap
+const User = require(`${__dirname}/models/User.js`)
+
+const testUser = {
+  email: 'admin@admin.io',
+  password: 'admin'
+}
+
 /*
 * Mongodb
 *
@@ -17,7 +25,24 @@ db.on('error', console.error.bind(console, 'connection error:'))
 db.once('open', function() {
   console.log('Connected  =====> nodeTask Captains DB')
   console.log('Listening on port =====> 3000')
+  setTestUser(testUser)
 })
+
+
+/**
+* @method setTestUser
+* @description Create a default test user with 'testUser' as a param
+* @author Andres Barradas
+*/
+function setTestUser(testUser) {
+  var criteria = { email: testUser.email, password: testUser.password }
+  const opts = { upsert: true, new: true }
+  User.findOneAndUpdate(criteria, testUser, opts)
+  .then(user => {
+    return Promise.resolve(user).then(console.log('created user', user.email))
+  })
+  .catch(err => console.log('error creating test user', err))
+}
 
 // Reset the database
 // db.collections['Image'].drop( function(err) {
