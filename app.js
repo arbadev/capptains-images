@@ -6,12 +6,17 @@ var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var formidable = require('express-formidable')
+var passport = require('passport')
+var session = require('express-session')
+var flash    = require('connect-flash')
+
+require('./config/passport')(passport)   // import passport config
 
 // User model to bootstrap
 const User = require(`${__dirname}/models/User.js`)
 
 const testUser = {
-  email: 'admin@admin.io',
+  username: 'admin',
   password: 'admin'
 }
 
@@ -35,11 +40,11 @@ db.once('open', function() {
 * @author Andres Barradas
 */
 function setTestUser(testUser) {
-  var criteria = { email: testUser.email, password: testUser.password }
+  var criteria = { email: testUser.username, password: testUser.password }
   const opts = { upsert: true, new: true }
   User.findOneAndUpdate(criteria, testUser, opts)
   .then(user => {
-    return Promise.resolve(user).then(console.log('created user', user.email))
+    return Promise.resolve(user).then(console.log('created user', user.username))
   })
   .catch(err => console.log('error creating test user', err))
 }
@@ -58,7 +63,19 @@ var images = require('./routes/images')
 
 var app = express()
 
-// formidable setup
+/*
+*    Passport initialize
+*
+*/
+app.use(session({ secret: 'captainsTask' }))
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash())
+
+/*
+*    Formidable, bodyParser setup
+*
+*/
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(formidable());
@@ -69,8 +86,22 @@ app.use(formidable());
 */
 app.use('/', routes)
 app.use('/images', images)
+app.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    console.log('POST /login -> req.fields', req.fields)
+    if (err) { return next(err); }
+    if (!user) { return res.redirect('/login'); }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect('/image/new');
+    });
+  })(req, res, next);
+});
 
-// view engine setup
+/*
+*    View engine setup
+*
+*/
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'jade')
 
@@ -113,6 +144,4 @@ app.use(function(err, req, res, next) {
     error: {}
   })
 })
-
-
 module.exports = app

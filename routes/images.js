@@ -12,8 +12,6 @@ var jsonParser = bodyParser.json()
 */
 
 router.get('/new',jsonParser, function (req, res) {
-  console.log('body', req.body);
-  console.log('/images/new');
   return res.render(
     'addImage',
     {
@@ -33,7 +31,6 @@ router.put('/:id/edit', function (req, res) {
 
 router.route('/:id',jsonParser)
 .get(function (req, res) {
-  console.log('params', req.params)
   imageController.show(req, res)
 })
 .put(function (req, res) {

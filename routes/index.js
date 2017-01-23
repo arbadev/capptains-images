@@ -38,17 +38,10 @@ router.get('/login', function(req, res) {
   )
 })
 
-router.post('/login', jsonParser, function(req, res) {
-  console.log('POST /login')
-  console.log('email', req.fields.email)
-  console.log('password', req.fields.password)
-
-  return res.render(
-    'addImage',
-    {
-      title: 'addImage',
-    }
-  )
-})
+// router.post('/login', jsonParser, passport.authenticate('local-login', {
+//         successRedirect : '/images/new',
+//         failureRedirect : '/login',
+//         failureFlash : true
+//     }));
 
 module.exports = router

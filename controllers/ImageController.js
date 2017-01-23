@@ -19,8 +19,6 @@ module.exports = {
   */
   create: function (req, res) {
     console.log('ImageController.create')
-    console.log(req.files.file.name)
-    console.log(req.files.file.path)
     const data = {
       name: req.files.file.name,
       created_at: new Date()
@@ -29,7 +27,6 @@ module.exports = {
     var promise = image.save()
 
     promise.then(image => {
-      console.log('Image', image);
       const extension =  req.files.file.name.split('.').pop();
       const lvlOne = image._id.toString().substr(0,2);
       const lvlTwo = image._id.toString().substr(2,2);
@@ -37,14 +34,10 @@ module.exports = {
       const imagePath = path.join(imagesDir, `/${lvlOne}/${lvlTwo}/${image._id}.${extension}`)
       const shortPath = `/images/${lvlOne}/${lvlTwo}/${image._id}.${extension}`
       const filePath = path.join(imagesDir, `/${lvlOne}/${lvlTwo}`)
-      console.log('image path', imagePath);
-      console.log('file path', req.files.file.path);
-
       if (!fs.existsSync(filePath) || !fs.existsSync(imagePath)) {
         mkdirp(filePath, (err) => {
           if (err) console.error(err)
           else {
-            console.log(`created dir ${filePath}`)
             fs.rename(req.files.file.path, imagePath)
           }
         })
@@ -55,9 +48,6 @@ module.exports = {
       return Image.findByIdAndUpdate(image._id, updateData, opts)
     })
     .then( updateImage => {
-      console.log('updated image ', updateImage)
-      // res.redirect(`/images/${image._id}`)
-      // res.redirect('/')
       return res.status(201).json(updateImage)
     })
     .catch(error => {
@@ -67,37 +57,15 @@ module.exports = {
   },
 
   /**
-  * hitController.list()
-  */
-  list: function (req, res) {
-    console.log('hitController.list')
-    const query = Hit.find()
-    const promise = query.exec()
-
-    promise.then(hits => {
-      return res.status(201).json(hits)
-    })
-    .catch(error => {
-      console.log.error('error ', error)
-    })
-  },
-
-  /**
-  * hitController.show()
+  * imageController.show()
   */
   show: function (req, res) {
     console.log('imageController.show')
-    console.log('params in SHOW', req.params)
     const id = req.params.id
     const criteria = {_id: id}
-    console.log('id: ', id)
     const promise = Image.findOne(criteria)
-
     promise.then(image => {
-      console.log('SHOW IMAGE', image);
       return res.sendFile(image.fullPath)
-
-      // return res.status(201).json(hit)
     })
     .catch(error => {
       return res.status(400).json(error)
@@ -106,7 +74,7 @@ module.exports = {
   },
 
   /**
-  * hitController.remove()
+  * imageController.remove()
   */
   remove: function (req, res) {
     console.log('imageController.remove')
@@ -114,7 +82,6 @@ module.exports = {
     const promise = Image.findByIdAndRemove(id)
     promise.then(removedImage => {
       fs.unlinkSync(removedImage.fullPath)
-      console.log('removed image', removedImage)
       return res.status(200).json(removedImage)
     })
     .catch(error => {

@@ -10,6 +10,7 @@
     "bluebird": "^3.4.7",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
+    "connect-flash" : "~0.1.1",
     "debug": "~2.2.0",
     "express": "~4.13.4",
     "express-formidable": "^1.0.0",
@@ -20,6 +21,8 @@
     "mongoose": "~4.6.0",
     "monk": "~3.1.2",
     "morgan": "~1.7.0",
+    "passport" : "~0.1.17",
+    "passport-local" : "~0.1.6",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
     "serve-favicon": "~2.3.0"
