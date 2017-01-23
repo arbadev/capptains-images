@@ -34,9 +34,9 @@ var images = require('./routes/images')
 var app = express()
 
 // formidable setup
-app.use(formidable());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(formidable());
 
 /*
 *    Routes at app

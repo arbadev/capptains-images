@@ -1,0 +1,20 @@
+extends ../node_modules/jade-bootstrap/_bootstrap.jade
+link(rel="stylesheet",href="/public/stylesheets/style.css")
+
+block body 
+  div(class="col-md-12")
+    p
+    .col-md-6.col-md-offset-3
+      +panel-default("Login")
+        div
+          form(action="/login" method="POST" enctype="multipart/form-data")
+            div
+              label(for="email") Email
+              input(type="text", name="email", id="email", class="form-control")
+            div
+              label(for="password") Password
+              input(type="text", name="password", id="password", class="form-control")
+            p
+            div(class="row top-space")
+              div(class="col-xs-10 col-sm-5")
+              input(type="submit", value="Save", class="btn btn-info")

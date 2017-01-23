@@ -19,8 +19,8 @@ module.exports = {
   */
   create: function (req, res) {
     console.log('ImageController.create')
-    console.log(req.files.file.name);
-    console.log(req.files.file.path);
+    console.log(req.files.file.name)
+    console.log(req.files.file.path)
     const data = {
       name: req.files.file.name,
       created_at: new Date()

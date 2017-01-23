@@ -12,6 +12,8 @@ var jsonParser = bodyParser.json()
 */
 
 router.get('/new',jsonParser, function (req, res) {
+  console.log('body', req.body);
+  console.log('/images/new');
   return res.render(
     'addImage',
     {
